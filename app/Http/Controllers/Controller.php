@@ -9,30 +9,45 @@ use Illuminate\Routing\Controller as BaseController;
 use Illuminate\Foundation\Validation\ValidatesRequests;
 use Illuminate\Foundation\Auth\Access\AuthorizesRequests;
 use Illuminate\Support\Facades\DB;
+use App\Service\LoginService;
+use Illuminate\Support\Facades\Log;
 
 class Controller extends BaseController
 {
     use AuthorizesRequests, DispatchesJobs, ValidatesRequests;
 
+    protected $loginService;
+    public function __construct()
+    {
+        $this->loginService = new LoginService;
+    }
+
 
     public function loginForm()
     {
-        return view('login');
+        $adminTool['admin_key'] = 'no login';
+        return view('login', $adminTool);
     }
 
     public function login(Request $request)
     {
-        dd($request->all());
+        $data['email'] = $request->input('email');
+        $data['password'] = $request->input('password');
 
+        $role = $this->loginService->getUserRole($data);
 
-        return view(route('homepage'));
+        $adminTool = $this->loginService->getViewRoleKey($role);
 
+        if(!empty($adminTool)) {
+            return view('login', $adminTool);
+        }
+
+        return view('login', $adminTool);
     }
 
     public function registerForm(){
 
         return view('register-form');
-
     }
     public function postRegisterForm(Request $request)
     {

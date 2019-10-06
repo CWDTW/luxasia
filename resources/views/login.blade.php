@@ -10,8 +10,8 @@
                             @csrf
                             <h3 class="text-center ">登入</h3>
                             <div class="form-group">
-                                <label for="username" class="text">Email:</label><br>
-                                <input type="text" name="username" id="email" class="form-control" required>
+                                <label for="email" class="text">Email:</label><br>
+                                <input type="text" name="email" id="email" class="form-control" required>
                             </div>
                             <div class="form-group">
                                 <label for="password" class="text">Password:</label><br>
@@ -37,3 +37,11 @@
 
 
 @endsection
+@push('script')
+    <script>
+        $(document).ready(function(){
+            let a = '{{ $admin_key }}'
+            console.log(a)
+        })
+    </script>
+@endpush
